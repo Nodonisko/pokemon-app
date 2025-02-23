@@ -1,4 +1,4 @@
-package com.pokemoncardcollector
+package com.nodon.pokemoncardcollector
 
 import android.app.Application
 import android.content.res.Configuration
