@@ -1,28 +1,34 @@
 {
-  "expo": {
-    "name": "pokemon-card-collector",
-    "slug": "pokemon-card-collector",
-    "version": "1.0.0",
-    "android": {
-      "package": "com.nodon.pokemoncardcollector"
-    },
-    "ios": {
-      "bundleIdentifier": "com.nodon.pokemoncardcollector"
-    },
-	"newArchEnabled": true,
-	"plugins": [
-		[
-		  "react-native-edge-to-edge"
-		],
-		[
-		  "expo-build-properties",
-		  {
-			"ios": {
-			  "deploymentTarget": "16.0"
-			}
-		  }
-		],
-		"./deploymentTargetPlugin.js"
-	  ]
-  }
+	"expo": {
+		"name": "pokemon-card-collector",
+		"slug": "pokemon-card-collector",
+		"version": "1.0.0",
+		"android": {
+			"package": "com.nodon.pokemoncardcollector"
+		},
+		"ios": {
+			"bundleIdentifier": "com.nodon.pokemoncardcollector"
+		},
+		"newArchEnabled": true,
+		"plugins": [
+			[
+				"react-native-edge-to-edge",
+				{
+					"android": {
+						"parentTheme": "Material3.Dynamic.Light"
+					}
+				}
+			],
+			["react-native-bottom-tabs", { "theme": "material3-dynamic" }],
+			[
+				"expo-build-properties",
+				{
+					"ios": {
+						"deploymentTarget": "16.0"
+					}
+				}
+			],
+			"./plugins/deploymentTargetPlugin.js"
+		]
+	}
 }
