@@ -44,13 +44,11 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
 		try {
 			set({ isLoading: true, error: null });
 
-			// Fetch pokemon list
 			const response = await fetch(
 				`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`,
 			);
 			const rawData = await response.json();
 
-			// Validate the list response
 			const validationResult = PokemonListResponseSchema.safeParse(rawData);
 
 			if (!validationResult.success) {

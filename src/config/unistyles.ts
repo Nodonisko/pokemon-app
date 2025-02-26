@@ -7,7 +7,6 @@ const lightTheme = {
 		xpIndicator: "#0000ff",
 		likeIcon: "#ff0000",
 	},
-	gap: (v: number) => v * 8,
 };
 
 const appThemes = {

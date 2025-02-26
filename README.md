@@ -1,5 +1,13 @@
-### Colors reference
-- https://reactnative.dev/docs/platformcolor
-- https://developer.apple.com/documentation/uikit/ui-element-colors
+# Pokemon Colletors app
 
-- https://github.com/facebook/react-native/blob/main/packages/rn-tester/js/examples/PlatformColor/PlatformColorExample.js
+## How to run the app
+
+1. `bun install`
+2. `bun expo prebuild --clean`
+3. `bun expo start`
+3. `bun android` or `bun ios`
+
+
+If you want to build release version of app use this command: `bun expo run:android --variant release` (recommended for testing performance).
+
+
