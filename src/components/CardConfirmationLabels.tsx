@@ -19,47 +19,48 @@ export const CardConfirmationLabels = React.memo(
 		confirmationMarkThreshold,
 		swipeConfirmationThreshold,
 	}: CardConfirmationLabelsProps) => {
-	const confirmationLeftStyle = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(
-				translateX.value + confirmationMarkThreshold,
-				[-swipeConfirmationThreshold, 0],
-				[1, 0],
-				"clamp",
-			),
-			transform: [{ rotate: "-20deg" }],
-			left: 32,
-		};
-	});
+		const confirmationLeftStyle = useAnimatedStyle(() => {
+			return {
+				opacity: interpolate(
+					translateX.value + confirmationMarkThreshold,
+					[-swipeConfirmationThreshold, 0],
+					[1, 0],
+					"clamp",
+				),
+				transform: [{ rotate: "-20deg" }],
+				left: 32,
+			};
+		});
 
-	const confirmationRightStyle = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(
-				translateX.value - confirmationMarkThreshold,
-				[0, swipeConfirmationThreshold],
-				[0, 1],
-				"clamp",
-			),
-			transform: [{ rotate: "20deg" }],
-			right: 32,
-		};
-	});
+		const confirmationRightStyle = useAnimatedStyle(() => {
+			return {
+				opacity: interpolate(
+					translateX.value - confirmationMarkThreshold,
+					[0, swipeConfirmationThreshold],
+					[0, 1],
+					"clamp",
+				),
+				transform: [{ rotate: "20deg" }],
+				right: 32,
+			};
+		});
 
-	return (
-		<>
-			<Animated.View
-				style={[styles.confirmationContainer, confirmationLeftStyle]}
-			>
-				<Text style={styles.confirmationIconText}>❌</Text>
-			</Animated.View>
-			<Animated.View
-				style={[styles.confirmationContainer, confirmationRightStyle]}
-			>
-				<Text style={styles.confirmationIconText}>✅</Text>
-			</Animated.View>
-		</>
-	);
-});
+		return (
+			<>
+				<Animated.View
+					style={[styles.confirmationContainer, confirmationLeftStyle]}
+				>
+					<Text style={styles.confirmationIconText}>❌</Text>
+				</Animated.View>
+				<Animated.View
+					style={[styles.confirmationContainer, confirmationRightStyle]}
+				>
+					<Text style={styles.confirmationIconText}>✅</Text>
+				</Animated.View>
+			</>
+		);
+	},
+);
 
 const styles = StyleSheet.create((theme, rt) => ({
 	confirmationIconText: {

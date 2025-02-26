@@ -39,7 +39,7 @@ const routes = [
 		}),
 		freezeOnBlur: true,
 	},
-]
+];
 
 export default function App() {
 	const [index, setIndex] = useState(0);

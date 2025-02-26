@@ -1,20 +1,16 @@
 import { Image } from "expo-image";
 import React, { useMemo } from "react";
-import {
-    Platform,
-    Text,
-    View
-} from "react-native";
+import { Platform, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-    interpolate,
-    interpolateColor,
-    runOnJS,
-    useAnimatedStyle,
-    useDerivedValue,
-    useSharedValue,
-    withSpring,
-    withTiming,
+	interpolate,
+	interpolateColor,
+	runOnJS,
+	useAnimatedStyle,
+	useDerivedValue,
+	useSharedValue,
+	withSpring,
+	withTiming,
 } from "react-native-reanimated";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { CARDS_IN_DECK, Pokemon } from "../stores/pokemonStore";
@@ -29,9 +25,10 @@ type CardProps = {
 	pokemon: Pokemon;
 };
 
-export const Card = React.memo(({ index, onSwipeLeft, onSwipeRight, pokemon }: CardProps) => {
-	const translateX = useSharedValue(0);
-	const { rt, theme } = useUnistyles();
+export const Card = React.memo(
+	({ index, onSwipeLeft, onSwipeRight, pokemon }: CardProps) => {
+		const translateX = useSharedValue(0);
+		const { rt, theme } = useUnistyles();
 
 		// The threshold for the swipe to be confirmed
 		const swipeConfirmationThreshold = rt.screen.width * 0.45;
@@ -55,7 +52,13 @@ export const Card = React.memo(({ index, onSwipeLeft, onSwipeRight, pokemon }: C
 							translateX.value = withSpring(0);
 						}
 					}),
-			[pokemon.id, onSwipeRight, onSwipeLeft, swipeConfirmationThreshold, rt.screen.width],
+			[
+				pokemon.id,
+				onSwipeRight,
+				onSwipeLeft,
+				swipeConfirmationThreshold,
+				rt.screen.width,
+			],
 		);
 
 		const position = useDerivedValue(() => {
@@ -73,7 +76,6 @@ export const Card = React.memo(({ index, onSwipeLeft, onSwipeRight, pokemon }: C
 					{ rotate: `${rotateX.value}deg` },
 					{ translateX: translateX.value },
 					{ scale: interpolate(position.value, [0, 1], [1, 0.8]) },
-					// There seems to be bug in Reanimated types, so we need to add to const
 				] as const,
 				opacity: interpolate(
 					translateX.value,
@@ -90,7 +92,6 @@ export const Card = React.memo(({ index, onSwipeLeft, onSwipeRight, pokemon }: C
 				),
 			};
 		});
-
 
 		return (
 			<GestureDetector gesture={gesture}>
@@ -117,6 +118,8 @@ export const Card = React.memo(({ index, onSwipeLeft, onSwipeRight, pokemon }: C
 		);
 	},
 );
+
+Card.displayName = "Card";
 
 const styles = StyleSheet.create((theme, rt) => ({
 	card: {
@@ -150,5 +153,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 			android: "sans-serif-condensed-medium",
 		}),
 	},
-
 }));

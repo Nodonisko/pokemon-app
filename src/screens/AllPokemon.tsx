@@ -19,7 +19,7 @@ export const AllPokemonScreen = () => {
 					(pokemon) =>
 						!likedPokemons.has(pokemon.id) && !dislikedPokemons.has(pokemon.id),
 				)
-				.slice(0, 4);
+				.slice(0, CARDS_IN_DECK);
 		}),
 	);
 

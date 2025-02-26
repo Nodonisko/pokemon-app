@@ -1,17 +1,14 @@
 import {
-    Canvas,
-    Group,
-    matchFont,
-    Path,
-    Skia,
-    Text
+	Canvas,
+	Group,
+	matchFont,
+	Path,
+	Skia,
+	Text,
 } from "@shopify/react-native-skia";
 import React, { useMemo } from "react";
 import { Platform } from "react-native";
-import {
-    useDerivedValue,
-    withSpring
-} from "react-native-reanimated";
+import { useDerivedValue, withSpring } from "react-native-reanimated";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 
 const RADIUS = 25;
