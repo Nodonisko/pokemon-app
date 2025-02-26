@@ -29,7 +29,7 @@ const CIRCLE_PATH = Skia.Path.Make().addCircle(
 const CANVAS_SIZE = RADIUS * 2 + STROKE_WIDTH + 1;
 const MAX_XP = 543;
 
-const fontFamily = Platform.select({ ios: "Helvetica", default: "serif" });
+const fontFamily = Platform.select({ ios: "Helvetica", default: "sans-serif" });
 const fontStyle = {
 	fontFamily,
 	fontSize: 14,

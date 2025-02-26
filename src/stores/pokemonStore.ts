@@ -1,21 +1,16 @@
 import { create } from 'zustand'
+import { 
+  PokemonListResponseSchema, 
+  PokemonDetailSchema,
+} from '../schemas/pokemonSchemas'
 
 export const CARDS_IN_DECK = 4
 
 export type Pokemon = {
   id: number
   name: string
-  base_experience: number
-  height: number
-  weight: number
-  sprites: {
-    front_default: string
-    other: {
-      'official-artwork': {
-        front_default: string
-      }
-    }
-  }
+  base_experience: number | null
+  imageUrl?: string | null
 }
 
 interface PokemonStore {
@@ -53,42 +48,85 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
       )
-      const data = await response.json()
+      const rawData = await response.json()
+      
+      // Validate the list response
+      const validationResult = PokemonListResponseSchema.safeParse(rawData)
+      
+      if (!validationResult.success) {
+        throw new Error(`Invalid API response: ${validationResult.error.message}`)
+      }
+      
+      const data = validationResult.data
 
       // Fetch detailed information for each pokemon
-      const pokemonDetails = await Promise.all(
-        data.results.map(async (pokemon: { url: string }) => {
-          const res = await fetch(pokemon.url)
-          return res.json()
+      const pokemonDetails: Array<Pokemon | null> = await Promise.all(
+        data.results.map(async (pokemon) => {
+          try {
+            const res = await fetch(pokemon.url)
+            const rawPokemonData = await res.json()
+            
+            // Validate the pokemon detail response
+            const detailValidation = PokemonDetailSchema.safeParse(rawPokemonData)
+            
+            if (!detailValidation.success) {
+              console.error(`Invalid pokemon data for ${pokemon.name}:`, detailValidation.error)
+              return null
+            }
+            
+            const { id, name, base_experience, sprites } = detailValidation.data
+            
+            // Pokemon detail is quite huge, so extract only the necessary data
+            return {
+              id: id,
+              name: name,
+              base_experience: base_experience,
+              imageUrl: sprites.other['official-artwork'].front_default,
+            }
+          } catch (error) {
+            console.error(`Failed to fetch details for ${pokemon.name}:`, error)
+            return null
+          }
         })
       )
 
+      // Filter out any null values from failed validations
+      const validPokemonDetails = pokemonDetails.filter(
+        (pokemon): pokemon is NonNullable<typeof pokemon> => pokemon !== null
+      )
+
       set({
-        pokemons: [...pokemons, ...pokemonDetails],
+        pokemons: [...pokemons, ...validPokemonDetails],
         offset: offset + limit,
         hasMore: data.next !== null,
         isLoading: false,
       })
     } catch (error) {
+      console.error('Pokemon fetch error:', error)
       set({ 
-        error: 'Failed to fetch pokemons', 
+        error: error instanceof Error ? error.message : 'Failed to fetch pokemons', 
         isLoading: false 
       })
     }
   },
 
   likePokemon: (id: number) => {
-    const { likedPokemons } = get()
+    const perf = performance.now()
+    const { likedPokemons, dislikedPokemons } = get()
     const newLiked = new Set(likedPokemons)
+    const newDisliked = new Set(dislikedPokemons)
     newLiked.add(id)
-    set({ likedPokemons: newLiked })
+    newDisliked.delete(id)
+    set({ likedPokemons: newLiked, dislikedPokemons: newDisliked })
   },
 
   dislikePokemon: (id: number) => {
-    const { dislikedPokemons } = get()
+    const { dislikedPokemons, likedPokemons } = get()
     const newDisliked = new Set(dislikedPokemons)
+    const newLiked = new Set(likedPokemons)
     newDisliked.add(id)
-    set({ dislikedPokemons: newDisliked })
+    newLiked.delete(id)
+    set({ dislikedPokemons: newDisliked, likedPokemons: newLiked })
   },
 
   resetStore: () => {
@@ -103,3 +141,5 @@ export const usePokemonStore = create<PokemonStore>((set, get) => ({
     })
   }
 }))
+
+

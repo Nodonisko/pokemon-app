@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PlatformColor, Text, View } from "react-native";
+import { Platform, PlatformColor, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TabView, { SceneMap } from "react-native-bottom-tabs";
@@ -9,8 +9,8 @@ import { HomeScreen } from "./src/screens/Home";
 import { FavouritesScreen } from "./src/screens/Favourites";
 
 const renderScene = SceneMap({
-	home: () => <HomeScreen />,
-	favourites: () => <FavouritesScreen />,
+	home: HomeScreen,
+	favourites: FavouritesScreen,
 });
 
 export default function App() {
@@ -19,18 +19,21 @@ export default function App() {
 		{
 			key: "home",
 			title: "Home",
-			focusedIcon: { sfSymbol: "house" },
+			focusedIcon: Platform.select({ ios: { sfSymbol: "square.stack.fill" }, android: require("./src/assets/square.stack.fill.svg") }),
+			unfocusedIcon: Platform.select({ ios: { sfSymbol: "square.stack" }, android: require("./src/assets/square.stack.svg") }),
 		},
 		{
 			key: "favourites",
 			title: "Favourites",
-			focusedIcon: { sfSymbol: "heart" },
+			focusedIcon: Platform.select({ ios: { sfSymbol: "heart.fill" }, android: require("./src/assets/heart.fill.svg") }),
+			unfocusedIcon: Platform.select({ ios: { sfSymbol: "heart" }, android: require("./src/assets/heart.svg") }),
+			freezeOnBlur: true,
 		},
 	]);
 
 	return (
-		<GestureHandlerRootView style={{ flex: 1 }}>
-			<SystemBars style="auto" />
+		<GestureHandlerRootView style={styles.container}>
+			<SystemBars style="dark" />
 			<TabView
 				navigationState={{ index, routes }}
 				renderScene={renderScene}
@@ -44,8 +47,5 @@ export default function App() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: PlatformColor("systemBackground"),
-		alignItems: "center",
-		justifyContent: "center",
 	},
 });
