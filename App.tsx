@@ -9,8 +9,8 @@ import { HomeScreen } from "./src/screens/Home";
 import { FavouritesScreen } from "./src/screens/Favourites";
 
 const renderScene = SceneMap({
-	home: HomeScreen,
-	favourites: FavouritesScreen,
+	home: () => <HomeScreen />,
+	favourites: () => <FavouritesScreen />,
 });
 
 export default function App() {

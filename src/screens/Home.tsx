@@ -1,59 +1,64 @@
-import { View, Text, PlatformColor, Platform } from "react-native";
+import { View, Text, PlatformColor, ActivityIndicator, Button } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Card } from "../components/Card";
-import { useState } from "react";
-
-const initialCards = [
-	{
-		id: 1,
-	},
-	{
-		id: 2,
-	},
-	{
-		id: 3,
-	},
-	{
-		id: 4,
-	},
-	{
-		id: 5,
-	},
-	{
-		id: 6,
-	},
-];
+import { useCallback, useEffect, useMemo, useState } from "react";
+import  { usePokemonStore,CARDS_IN_DECK, Pokemon } from "../stores/pokemonStore";
+import { useShallow } from 'zustand/react/shallow'
+import { runOnUI } from "react-native-reanimated";
 
 export const HomeScreen = () => {
-	const [cards, setCards] = useState(initialCards);
+	const likePokemon = usePokemonStore(state => state.likePokemon);
+	const dislikePokemon = usePokemonStore(state => state.dislikePokemon);
+	const fetchPokemons = usePokemonStore(state => state.fetchPokemons);
+	const isLoading = usePokemonStore(state => state.isLoading);
+	const hasMore = usePokemonStore(state => state.hasMore);
+	const pokemons = usePokemonStore(state => state.pokemons);
+	const unratedPokemons = usePokemonStore(useShallow(({pokemons, likedPokemons, dislikedPokemons}) => {
+		return pokemons.filter(pokemon => !likedPokemons.has(pokemon.id) && !dislikedPokemons.has(pokemon.id)).slice(0, 4);
+	}))
 
-	console.log(cards);
 
-	const removeFirstCard = () => {
-		setCards((prevCards) => [...prevCards.slice(1), { id: Math.random() }]);
-	};
+	useEffect(() => {
+		if (unratedPokemons.length < CARDS_IN_DECK && !isLoading && hasMore) {
+			console.log("fetching more pokemons")
+			fetchPokemons()
+		}
+	}, [unratedPokemons]);
 
-	const handleSwipeLeft = (index: number) => {
-		removeFirstCard();
-	};
 
-	const handleSwipeRight = (index: number) => {
-		removeFirstCard();
-	};
+	const handleSwipeLeft = useCallback((id: number) => {
+		dislikePokemon(id);
+	}, [dislikePokemon]);
+
+	const handleSwipeRight = useCallback((id: number) => {
+		likePokemon(id);
+	}, [likePokemon]);
+
+
+	if (isLoading && unratedPokemons.length === 0) {
+		return (
+			<View style={styles.container}>
+				<ActivityIndicator size="large" />
+			</View>	
+		);
+	}
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.cardsContainer}>
-				{cards.map((card, index) => (
+				{unratedPokemons.map((pokemon, index) => (
 					<Card
-						key={card.id}
+						key={pokemon.id}
 						index={index}
-						numberOfCards={cards.length}
-						onSwipeLeft={() => handleSwipeLeft(index)}
-						onSwipeRight={() => handleSwipeRight(index)}
+						numberOfCards={unratedPokemons.length}
+						onSwipeLeft={() => handleSwipeLeft(pokemon.id)}
+						onSwipeRight={() => handleSwipeRight(pokemon.id)}
+						pokemon={pokemon}
 					/>
 				))}
 			</View>
+			<Button title="Like" onPress={() => handleSwipeRight(unratedPokemons[0].id)} />
+				<Button title="Run GC JS" onPress={() => global.gc()} />
 		</View>
 	);
 };
