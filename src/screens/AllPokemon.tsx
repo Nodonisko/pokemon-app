@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, Text } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { useShallow } from "zustand/react/shallow";
 import { Card } from "../components/Card";
@@ -11,6 +11,7 @@ export const AllPokemonScreen = () => {
 	const fetchPokemons = usePokemonStore((state) => state.fetchPokemons);
 	const isLoading = usePokemonStore((state) => state.isLoading);
 	const hasMore = usePokemonStore((state) => state.hasMore);
+	const error = usePokemonStore((state) => state.error);
 	const unratedPokemons = usePokemonStore(
 		useShallow(({ pokemons, likedPokemons, dislikedPokemons }) => {
 			return pokemons
@@ -46,6 +47,14 @@ export const AllPokemonScreen = () => {
 		return (
 			<View style={styles.container}>
 				<ActivityIndicator size="large" />
+			</View>
+		);
+	}
+
+	if (unratedPokemons.length === 0 && error) {
+		return (
+			<View style={styles.container}>
+				<Text>{error}</Text>
 			</View>
 		);
 	}
