@@ -1,22 +1,18 @@
 import {
-	Canvas,
-	Circle,
-	Path,
-	Skia,
-	Group,
-	listFontFamilies,
-	matchFont,
-	Text,
-	Rect,
+    Canvas,
+    Group,
+    matchFont,
+    Path,
+    Skia,
+    Text
 } from "@shopify/react-native-skia";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import React, { useMemo } from "react";
-import {
-	useDerivedValue,
-	withSpring,
-	withTiming,
-} from "react-native-reanimated";
 import { Platform } from "react-native";
+import {
+    useDerivedValue,
+    withSpring
+} from "react-native-reanimated";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
 
 const RADIUS = 25;
 const STROKE_WIDTH = 5;
@@ -36,47 +32,48 @@ const fontStyle = {
 };
 const font = matchFont(fontStyle);
 
-export const XPProgressPie = React.memo(({
-	isVisible,
-	xp,
-}: { isVisible: boolean; xp: number }) => {
-	const { theme } = useUnistyles();
-	const progress = useDerivedValue(() => {
-		return isVisible ? withSpring(xp / MAX_XP) : 0;
-	});
+export const XPProgressPie = React.memo(
+	({ isVisible, xp }: { isVisible: boolean; xp: number }) => {
+		const { theme } = useUnistyles();
+		const progress = useDerivedValue(() => {
+			return isVisible ? withSpring(xp / MAX_XP) : 0;
+		});
 
-    const text = `${xp}xp`
-	const textDimensions = useMemo(() => font.measureText(text), [ text]);
+		const text = `${xp}xp`;
+		const textDimensions = useMemo(() => font.measureText(text), [text]);
 
-	return (
-		<Canvas style={styles.container}>
-			<Group transform={[{ rotate: -Math.PI / 2 }]}>
-				<Path
-					path={CIRCLE_PATH}
-					color="lightGray"
-					style="stroke"
-					strokeWidth={STROKE_WIDTH}
-					strokeCap="round"
+		return (
+			<Canvas style={styles.container}>
+				<Group transform={[{ rotate: -Math.PI / 2 }]}>
+					<Path
+						path={CIRCLE_PATH}
+						color="lightGray"
+						style="stroke"
+						strokeWidth={STROKE_WIDTH}
+						strokeCap="round"
+					/>
+					<Path
+						path={CIRCLE_PATH}
+						color={theme.colors.xpIndicator}
+						style="stroke"
+						strokeWidth={STROKE_WIDTH}
+						strokeCap="round"
+						end={progress}
+					/>
+				</Group>
+				<Text
+					x={CANVAS_SIZE / 2 - textDimensions.width / 2}
+					y={CANVAS_SIZE / 2 + textDimensions.height / 3}
+					text={text}
+					font={font}
+					color="black"
 				/>
-				<Path
-					path={CIRCLE_PATH}
-					color={theme.colors.xpIndicator}
-					style="stroke"
-					strokeWidth={STROKE_WIDTH}
-					strokeCap="round"
-					end={progress}
-				/>
-			</Group>
-			<Text
-				x={CANVAS_SIZE / 2 - textDimensions.width / 2}
-				y={CANVAS_SIZE / 2 + textDimensions.height / 3}
-				text={text}
-				font={font}
-				color="black"
-			/>
-		</Canvas>
-	);
-});
+			</Canvas>
+		);
+	},
+);
+
+XPProgressPie.displayName = "XPProgressPie";
 
 const styles = StyleSheet.create((theme, rt) => ({
 	container: {

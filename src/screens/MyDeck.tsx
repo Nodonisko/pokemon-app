@@ -1,11 +1,10 @@
 import { LegendList } from "@legendapp/list";
-import { View, Text, PlatformColor } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { usePokemonStore } from "../stores/pokemonStore";
 import { useShallow } from "zustand/react/shallow";
-import { PokemonListItem, ITEM_HEIGHT } from "../components/PokemonListItem";
+import { ITEM_HEIGHT, PokemonListItem } from "../components/PokemonListItem";
+import { usePokemonStore } from "../stores/pokemonStore";
 
-export const FavouritesScreen = () => {
+export const MyDeckScreen = () => {
 	const items = usePokemonStore(
 		useShallow(({ likedPokemons, pokemons }) => {
 			return pokemons.filter((pokemon) => likedPokemons.has(pokemon.id));

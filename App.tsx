@@ -5,28 +5,40 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TabView, { SceneMap } from "react-native-bottom-tabs";
 import { SystemBars } from "react-native-edge-to-edge";
 
-import { HomeScreen } from "./src/screens/Home";
-import { FavouritesScreen } from "./src/screens/Favourites";
+import { AllPokemonScreen } from "./src/screens/AllPokemon";
+import { MyDeckScreen } from "./src/screens/MyDeck";
 
 const renderScene = SceneMap({
-	home: HomeScreen,
-	favourites: FavouritesScreen,
+	allPokemons: AllPokemonScreen,
+	myDeck: MyDeckScreen,
 });
 
 export default function App() {
 	const [index, setIndex] = useState(0);
 	const [routes] = useState([
 		{
-			key: "home",
-			title: "Home",
-			focusedIcon: Platform.select({ ios: { sfSymbol: "square.stack.fill" }, android: require("./src/assets/square.stack.fill.svg") }),
-			unfocusedIcon: Platform.select({ ios: { sfSymbol: "square.stack" }, android: require("./src/assets/square.stack.svg") }),
+			key: "allPokemons",
+			title: "All Pokémons",
+			focusedIcon: Platform.select({
+				ios: { sfSymbol: "square.stack.fill" },
+				android: require("./src/assets/square.stack.fill.svg"),
+			}),
+			unfocusedIcon: Platform.select({
+				ios: { sfSymbol: "square.stack" },
+				android: require("./src/assets/square.stack.svg"),
+			}),
 		},
 		{
-			key: "favourites",
-			title: "Favourites",
-			focusedIcon: Platform.select({ ios: { sfSymbol: "heart.fill" }, android: require("./src/assets/heart.fill.svg") }),
-			unfocusedIcon: Platform.select({ ios: { sfSymbol: "heart" }, android: require("./src/assets/heart.svg") }),
+			key: "myDeck",
+			title: "My Deck",
+			focusedIcon: Platform.select({
+				ios: { sfSymbol: "heart.fill" },
+				android: require("./src/assets/heart.fill.svg"),
+			}),
+			unfocusedIcon: Platform.select({
+				ios: { sfSymbol: "heart" },
+				android: require("./src/assets/heart.svg"),
+			}),
 			freezeOnBlur: true,
 		},
 	]);
