@@ -12,6 +12,8 @@ If you want to build release version of app use this command: `bun expo run:andr
 
 ## Screenshot
 
+[Video showcase](https://www.youtube.com/watch?v=GCXu3iUBsfI)
+
 <img src="./screenshot.png" width="33%" alt="Pokemon Collectors App Screenshot">
 
 
