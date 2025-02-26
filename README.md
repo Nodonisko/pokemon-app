@@ -10,4 +10,8 @@
 
 If you want to build release version of app use this command: `bun expo run:android --variant release` (recommended for testing performance).
 
+## Screenshot
+
+<img src="./screenshot.png" width="33%" alt="Pokemon Collectors App Screenshot">
+
 
